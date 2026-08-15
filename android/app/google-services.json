@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475808793328",
+    "project_id": "marivioerp",
+    "storage_bucket": "marivioerp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475808793328:android:1aa05d7d201859cafc3835",
+        "android_client_info": {
+          "package_name": "com.example.erp_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ET9_9M1M4tuGe2JWnKZz1Ekxl1c1dmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
