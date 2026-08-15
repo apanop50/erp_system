@@ -1,0 +1,30 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+
+# Android
+android/.gradle/
+android/.kotlin/
+android/build/
+android/app/build/
+android/local.properties
+
+# Gradle
+.gradle/
+
+# IDE
+.idea/
+.vscode/
+
+# Firebase secrets
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Logs / temporary files
+*.log
+run_log.txt
+hs_err_pid*.log

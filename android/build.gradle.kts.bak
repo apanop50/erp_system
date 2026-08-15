@@ -1,0 +1,62 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Chinese mirrors as fallback only (Google repo may be flaky in some regions)
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/central") }
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+    }
+}
+
+val newBuildDir: Directory =
+    rootProject.layout.buildDirectory
+        .dir("../../build")
+        .get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+// Fix for :jni module "Cannot query the value of this provider" error
+// Use plugins.withId instead of afterEvaluate to configure subprojects
+subprojects {
+    plugins.withId("com.android.library") {
+        val androidExtension = extensions.findByName("android")
+        if (androidExtension != null) {
+            try {
+                // Use reflection to set compileSdkVersion
+                val clazz = androidExtension.javaClass
+                try {
+                    val compileSdkMethod = clazz.getMethod("compileSdkVersion", String::class.java)
+                    compileSdkMethod.invoke(androidExtension, "36")
+                } catch (e: NoSuchMethodException) {
+                    try {
+                        val compileSdkMethod = clazz.getMethod("setCompileSdkVersion", Int::class.javaPrimitiveType)
+                        compileSdkMethod.invoke(androidExtension, 36)
+                    } catch (e2: Exception) {
+                        // Ignore
+                    }
+                }
+                // Try to set ndkVersion
+                try {
+                    val setNdkVersionMethod = clazz.getMethod("setNdkVersion", String::class.java)
+                    setNdkVersionMethod.invoke(androidExtension, "28.2.13676358")
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+    }
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
